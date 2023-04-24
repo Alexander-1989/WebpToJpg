@@ -96,16 +96,15 @@ namespace WebpToJpg
         private string GenerateRandomName(int length, string extension = "")
         {
             string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int count = length + extension.Length;
+            int count = length + (extension?.Length ?? 0);
             char[] result = new char[count];
 
             for (int i = 0; i < length; i++)
             {
-                int index = random.Next(alphabet.Length);
-                result[i] = alphabet[index];
+                result[i] = alphabet[random.Next(alphabet.Length)];
             }
 
-            for (int j = 0; j < extension.Length; j++)
+            for (int j = 0; j < extension?.Length; j++)
             {
                 result[length + j] = extension[j];
             }
@@ -276,22 +275,22 @@ namespace WebpToJpg
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             SelectFiles();
         }
 
-        private void convertToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ConvertToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectFiles();
         }
 
-        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFolder(savepath);
         }
 
-        private void setFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -299,7 +298,7 @@ namespace WebpToJpg
             }
         }
 
-        private void delSourceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DelSourceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             deletePhoto.Checked = !deletePhoto.Checked;
         }
@@ -310,7 +309,7 @@ namespace WebpToJpg
             menuStrip1.BackColor = color;
         }
 
-        private void colorFormToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ColorFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -318,24 +317,30 @@ namespace WebpToJpg
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void openOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openOutputFolder.Checked = !openOutputFolder.Checked;
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             RandomName.Checked = !RandomName.Checked;
         }
 
-        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ToolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Enum.TryParse(toolStripComboBox1.Text, out outputFormat);
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            string name = GenerateRandomName(10, null);
+            MessageBox.Show(name);
         }
     }
 }

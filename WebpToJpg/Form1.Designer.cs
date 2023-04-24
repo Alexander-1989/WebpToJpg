@@ -55,7 +55,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "Convert";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // openFileDialog1
             // 
@@ -92,78 +92,78 @@
             // convertToolStripMenuItem
             // 
             this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
-            this.convertToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.convertToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.convertToolStripMenuItem.Text = "Convert";
-            this.convertToolStripMenuItem.Click += new System.EventHandler(this.convertToolStripMenuItem_Click);
+            this.convertToolStripMenuItem.Click += new System.EventHandler(this.ConvertToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox1});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(198, 22);
             this.toolStripMenuItem1.Text = "Output Format";
             // 
             // toolStripComboBox1
             // 
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.ToolStripComboBox1_SelectedIndexChanged);
             // 
             // RandomName
             // 
             this.RandomName.Name = "RandomName";
-            this.RandomName.Size = new System.Drawing.Size(197, 22);
+            this.RandomName.Size = new System.Drawing.Size(198, 22);
             this.RandomName.Text = "Random File Name";
-            this.RandomName.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.RandomName.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
             // deletePhoto
             // 
             this.deletePhoto.Name = "deletePhoto";
-            this.deletePhoto.Size = new System.Drawing.Size(197, 22);
+            this.deletePhoto.Size = new System.Drawing.Size(198, 22);
             this.deletePhoto.Text = "Deleting source file";
-            this.deletePhoto.Click += new System.EventHandler(this.delSourceToolStripMenuItem_Click);
+            this.deletePhoto.Click += new System.EventHandler(this.DelSourceToolStripMenuItem_Click);
             // 
             // openOutputFolder
             // 
             this.openOutputFolder.Name = "openOutputFolder";
-            this.openOutputFolder.Size = new System.Drawing.Size(197, 22);
+            this.openOutputFolder.Size = new System.Drawing.Size(198, 22);
             this.openOutputFolder.Text = "Opening Output Folder";
-            this.openOutputFolder.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
+            this.openOutputFolder.Click += new System.EventHandler(this.OpenOutputFolderToolStripMenuItem_Click);
             // 
             // setFolderToolStripMenuItem
             // 
             this.setFolderToolStripMenuItem.Name = "setFolderToolStripMenuItem";
-            this.setFolderToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.setFolderToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.setFolderToolStripMenuItem.Text = "Set Output Folder";
-            this.setFolderToolStripMenuItem.Click += new System.EventHandler(this.setFolderToolStripMenuItem_Click);
+            this.setFolderToolStripMenuItem.Click += new System.EventHandler(this.SetFolderToolStripMenuItem_Click);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.openFolderToolStripMenuItem.Text = "Open Output Folder";
-            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
+            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.OpenFolderToolStripMenuItem_Click);
             // 
             // colorFormToolStripMenuItem
             // 
             this.colorFormToolStripMenuItem.Name = "colorFormToolStripMenuItem";
-            this.colorFormToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.colorFormToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.colorFormToolStripMenuItem.Text = "Set Form Color";
-            this.colorFormToolStripMenuItem.Click += new System.EventHandler(this.colorFormToolStripMenuItem_Click);
+            this.colorFormToolStripMenuItem.Click += new System.EventHandler(this.ColorFormToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.exitToolStripMenuItem.Text = "Application Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(190, 113);
+            this.ClientSize = new System.Drawing.Size(190, 115);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
