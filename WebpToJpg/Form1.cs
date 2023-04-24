@@ -1,0 +1,341 @@
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.VisualBasic.FileIO;
+using WebpToJpg.ColorServise;
+using WebpToJpg.ImageServise;
+
+namespace WebpToJpg
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            AllowDrop = true;
+            KeyDown += Key_Down;
+            DragDrop += Panel1_DragDrop;
+            DragEnter += Panel1_DragEnter;
+            MouseDown += Form1_MouseDown;
+            MouseMove += Form1_MouseMove;
+            FormClosed += Form1_FormClosed;
+            menuStrip1.MouseDown += Form1_MouseDown;
+            menuStrip1.MouseMove += Form1_MouseMove;
+            button1.KeyDown += Key_Down;
+            colorDialog1.CustomColors = new int[] { -986896, -16338907 };
+            toolStripComboBox1.Items.AddRange(Enum.GetNames(typeof(PictureFormat)));
+            toolStripComboBox1.SelectedIndex = 0;
+        }
+
+        private enum PictureFormat
+        {
+            jpg,
+            webp
+        }
+
+        private PictureFormat outputFormat;
+        private Point lastPosition;
+        private string savepath = null;
+        private readonly string logFile = "log.txt";
+        private readonly INIFile INI = new INIFile();
+        private readonly Random random = new Random();
+        private readonly WebpConverter converter = new WebpConverter();
+
+        private void Key_Down(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Escape)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            if (INI.FileExists)
+            {
+                try
+                {
+                    Location = new Point(INI.Parse("Main", "X"),
+                                         INI.Parse("Main", "Y"));
+                    toolStripComboBox1.Text = INI.Read("Main", "Format");
+                    RandomName.Checked = INI.Parse<bool>("Main", "RandomName");
+                    deletePhoto.Checked = INI.Parse<bool>("Main", "DeleteSoucePhoto");
+                    openOutputFolder.Checked = INI.Parse<bool>("Main", "OpenOutputFolder");
+                    BackColor = ColorConvert.ColorFromHex(INI.Read("Main", "ColorForm"));
+                }
+                catch (Exception exc)
+                {
+                    ShowMessageBox(exc.Message);
+                }
+            }
+            menuStrip1.BackColor = BackColor;
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            INI.Write("Main", "X", Location.X);
+            INI.Write("Main", "Y", Location.Y);
+            INI.Write("Main", "Format", outputFormat);
+            INI.Write("Main", "RandomName", RandomName.Checked);
+            INI.Write("Main", "DeleteSoucePhoto", deletePhoto.Checked);
+            INI.Write("Main", "OpenOutputFolder", openOutputFolder.Checked);
+            INI.Write("Main", "ColorForm", ColorConvert.ColorToHex(BackColor));
+        }
+
+        private void ShowMessageBox(string message)
+        {
+            MsgBox messageBox = new MsgBox(message);
+            messageBox.Show(this);
+        }
+
+        private string GenerateRandomName(int length, string extension = "")
+        {
+            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            int count = length + extension.Length;
+            char[] result = new char[count];
+
+            for (int i = 0; i < length; i++)
+            {
+                int index = random.Next(alphabet.Length);
+                result[i] = alphabet[index];
+            }
+
+            for (int j = 0; j < extension.Length; j++)
+            {
+                result[length + j] = extension[j];
+            }
+
+            return new string(result);
+        }
+
+        private void OpenFolder(string path)
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+            else
+            {
+                ShowMessageBox("Output Folder is not selected");
+            }
+        }
+
+        private bool DirectoryIsEmpty(string path)
+        {
+            return Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories).Length == 0;
+        }
+
+        private void DeleteEmptyDirectory(string path, bool recursive = false)
+        {
+            if (Directory.Exists(path) && DirectoryIsEmpty(path))
+            {
+                Directory.Delete(path, recursive);
+            }
+        }
+
+        private string[] GetAllFiles(params string[] paths)
+        {
+            List<string> result = new List<string>();
+
+            foreach (string path in paths)
+            {
+                if (File.Exists(path))
+                {
+                    result.Add(path);
+                }
+                else
+                {
+                    string[] files = Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories);
+                    result.AddRange(files);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private void Panel1_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop, false) ? DragDropEffects.Move : DragDropEffects.None;
+        }
+
+        private async void Panel1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            await OpenFiles(GetAllFiles(paths));
+
+            foreach (string path in paths)
+            {
+                DeleteEmptyDirectory(path, true);
+            }
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                int dx = e.Location.X - lastPosition.X;
+                int dy = e.Location.Y - lastPosition.Y;
+                Location = new Point(Location.X + dx, Location.Y + dy);
+            }
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            lastPosition = e.Location;
+        }
+
+        private void WriteLog(string msg)
+        {
+            string text = "[" + DateTime.Now + "] " + msg + "\n";
+            File.AppendAllText(logFile, text, Encoding.Default);
+        }
+
+        private async Task OpenFiles(string[] files)
+        {
+            if (string.IsNullOrEmpty(savepath))
+            {
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.Cancel)
+                {
+                    return;
+                }
+                savepath = folderBrowserDialog1.SelectedPath;
+            }
+
+            foreach (string sourcePath in files)
+            {
+                string destinationFileName = RandomName.Checked ? GenerateRandomName(10) : Path.GetFileNameWithoutExtension(sourcePath);
+                string destinationPath = Path.Combine(savepath, destinationFileName) + $".{outputFormat}";
+                bool success = await Task.Run(() => TryConvert(sourcePath, destinationPath, outputFormat));
+
+                if (success && deletePhoto.Checked)
+                {
+                    FileSystem.DeleteFile(sourcePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    WriteLog($"Source file {sourcePath} was deleted");
+                }
+            }
+
+            if (openOutputFolder.Checked)
+            {
+                OpenFolder(savepath);
+            }
+
+            ShowMessageBox("Done!");
+        }
+
+        private bool TryConvert(string sourse, string destination, PictureFormat format)
+        {
+            bool success = true;
+            try
+            {
+                switch (format)
+                {
+                    case PictureFormat.jpg:
+                        converter.ConvertWebpToJpg(sourse, destination);
+                        break;
+                    case PictureFormat.webp:
+                        converter.ConvertJpgToWebp(sourse, destination);
+                        break;
+                }
+
+                if (sourse.Equals(destination))
+                {
+                    success = false;
+                }
+
+                WriteLog($"File {sourse} convert to {destination}");
+            }
+            catch (Exception)
+            {
+                if (sourse.Equals(destination))
+                {
+                    success = false;
+                }
+                else
+                {
+                    File.Copy(sourse, destination, true);
+                    WriteLog($"File {sourse} copyed to {destination}");
+                }
+            }
+            return success;
+        }
+
+        private async void SelectFiles()
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                await OpenFiles(openFileDialog1.FileNames);
+            }
+            else
+            {
+                ShowMessageBox("Fucking Idiot!!!!!!");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SelectFiles();
+        }
+
+        private void convertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectFiles();
+        }
+
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFolder(savepath);
+        }
+
+        private void setFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                savepath = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private void delSourceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deletePhoto.Checked = !deletePhoto.Checked;
+        }
+
+        private void SetColor(Color color)
+        {
+            BackColor = color;
+            menuStrip1.BackColor = color;
+        }
+
+        private void colorFormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SetColor(colorDialog1.Color);
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void openOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openOutputFolder.Checked = !openOutputFolder.Checked;
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            RandomName.Checked = !RandomName.Checked;
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Enum.TryParse(toolStripComboBox1.Text, out outputFormat);
+        }
+    }
+}
