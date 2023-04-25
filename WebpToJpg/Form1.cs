@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
 using WebpToJpg.ColorServise;
 using WebpToJpg.ImageServise;
+using WebpToJpg.UtilitiesServise;
 
 namespace WebpToJpg
 {
@@ -91,25 +92,6 @@ namespace WebpToJpg
         {
             MsgBox messageBox = new MsgBox(message);
             messageBox.Show(this);
-        }
-
-        private string GenerateRandomName(int length, string extension = "")
-        {
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int count = length + (extension?.Length ?? 0);
-            char[] result = new char[count];
-
-            for (int i = 0; i < length; i++)
-            {
-                result[i] = alphabet[random.Next(alphabet.Length)];
-            }
-
-            for (int j = 0; j < extension?.Length; j++)
-            {
-                result[length + j] = extension[j];
-            }
-
-            return new string(result);
         }
 
         private void OpenFolder(string path)
@@ -207,7 +189,7 @@ namespace WebpToJpg
 
             foreach (string sourcePath in files)
             {
-                string destinationFileName = RandomName.Checked ? GenerateRandomName(10) : Path.GetFileNameWithoutExtension(sourcePath);
+                string destinationFileName = RandomName.Checked ? Utilities.GetRandomName(10, 10) : Path.GetFileNameWithoutExtension(sourcePath);
                 string destinationPath = Path.Combine(savepath, destinationFileName) + $".{outputFormat}";
                 bool success = await Task.Run(() => TryConvert(sourcePath, destinationPath, outputFormat));
 
@@ -335,12 +317,6 @@ namespace WebpToJpg
         private void ToolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Enum.TryParse(toolStripComboBox1.Text, out outputFormat);
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            string name = GenerateRandomName(10, null);
-            MessageBox.Show(name);
         }
     }
 }
