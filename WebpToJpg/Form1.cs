@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Drawing;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -96,9 +97,9 @@ namespace WebpToJpg
 
         private void OpenFolder(string path)
         {
-            if (!string.IsNullOrEmpty(path))
+            if (Directory.Exists(path))
             {
-                System.Diagnostics.Process.Start(path);
+                Process.Start(path);
             }
             else
             {
@@ -189,7 +190,7 @@ namespace WebpToJpg
 
             foreach (string sourcePath in files)
             {
-                string destinationFileName = RandomName.Checked ? Utilities.GetRandomName(10, 10) : Path.GetFileNameWithoutExtension(sourcePath);
+                string destinationFileName = RandomName.Checked ? Utilities.GetRandomName() : Path.GetFileNameWithoutExtension(sourcePath);
                 string destinationPath = Path.Combine(savepath, destinationFileName) + $".{outputFormat}";
                 bool success = await Task.Run(() => TryConvert(sourcePath, destinationPath, outputFormat));
 
