@@ -10,20 +10,20 @@ namespace WebpToJpg.ImageServise
         private readonly SimpleDecoder decoder = new SimpleDecoder();
         private readonly SimpleEncoder encoder = new SimpleEncoder();
 
-        public void ConvertWebpToJpg(string sourse, string destination)
+        public void ConvertWebpToJpg(string sourseFile, string destinationFile)
         {
-            byte[] buffer = File.ReadAllBytes(sourse);
+            byte[] buffer = File.ReadAllBytes(sourseFile);
             using (Bitmap bitmap = decoder.DecodeFromBytes(buffer, buffer.Length))
             {
-                bitmap.Save(destination, ImageFormat.Jpeg);
+                bitmap.Save(destinationFile, ImageFormat.Jpeg);
             }
         }
 
-        public void ConvertJpgToWebp(string sourse, string destination)
+        public void ConvertJpgToWebp(string sourseFile, string destinationFile)
         {
-            using (Bitmap bitmap = new Bitmap(sourse))
+            using (Bitmap bitmap = new Bitmap(sourseFile))
             {
-                using (FileStream fileStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
+                using (FileStream fileStream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write))
                 {
                     encoder.Encode(bitmap, fileStream, 100);
                 }

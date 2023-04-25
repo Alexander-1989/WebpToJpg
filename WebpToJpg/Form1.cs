@@ -208,38 +208,38 @@ namespace WebpToJpg
             ShowMessageBox("Done!");
         }
 
-        private bool TryConvert(string sourse, string destination, PictureFormat format)
+        private bool TryConvert(string sourcePath, string destinationPath, PictureFormat outputFormat)
         {
             bool success = true;
             try
             {
-                switch (format)
+                switch (outputFormat)
                 {
                     case PictureFormat.jpg:
-                        converter.ConvertWebpToJpg(sourse, destination);
+                        converter.ConvertWebpToJpg(sourcePath, destinationPath);
                         break;
                     case PictureFormat.webp:
-                        converter.ConvertJpgToWebp(sourse, destination);
+                        converter.ConvertJpgToWebp(sourcePath, destinationPath);
                         break;
                 }
 
-                if (sourse.Equals(destination))
+                if (sourcePath.Equals(destinationPath))
                 {
                     success = false;
                 }
 
-                WriteLog($"File {sourse} convert to {destination}");
+                WriteLog($"File {sourcePath} convert to {destinationPath}");
             }
             catch (Exception)
             {
-                if (sourse.Equals(destination))
+                if (sourcePath.Equals(destinationPath))
                 {
                     success = false;
                 }
                 else
                 {
-                    File.Copy(sourse, destination, true);
-                    WriteLog($"File {sourse} copyed to {destination}");
+                    File.Copy(sourcePath, destinationPath, true);
+                    WriteLog($"File {sourcePath} copyed to {destinationPath}");
                 }
             }
             return success;
