@@ -4,15 +4,17 @@ namespace WebpToJpg.UtilitiesServise
 {
     internal static class Utilities
     {
+        private const int minValue = 5;
+        private const int maxValue = 20;
         private static readonly Random random = new Random();
 
         public static string GetRandomName()
         {
-            return GetRandomName(5, 20, null);
+            return GetRandomName(minValue, maxValue, null);
         }
         public static string GetRandomName(int max)
         {
-            return GetRandomName(0, max, null);
+            return GetRandomName(minValue, max, null);
         }
 
         public static string GetRandomName(int min, int max)
@@ -22,19 +24,19 @@ namespace WebpToJpg.UtilitiesServise
 
         public static string GetRandomName(string extension)
         {
-            return GetRandomName(5, 20, extension);
+            return GetRandomName(minValue, maxValue, extension);
         }
 
         public static string GetRandomName(int max, string extension)
         {
-            return GetRandomName(0, max, extension);
+            return GetRandomName(minValue, max, extension);
         }
 
         public static string GetRandomName(int min, int max, string extension)
         {
             string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int minimum = min >= 0 ? min : 0;
-            int maximum = max >= min ? max : min;
+            int minimum = min < 0 ? 0 : min;
+            int maximum = max < min ? min : max;
             int lineLength = random.Next(minimum, maximum);
             int extensionLength = extension?.Length ?? 0;
             char[] result = new char[lineLength + extensionLength];
