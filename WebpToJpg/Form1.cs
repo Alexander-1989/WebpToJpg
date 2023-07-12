@@ -40,12 +40,6 @@ namespace WebpToJpg
             toolStripComboBox1.SelectedIndex = 0;
         }
 
-        private enum PictureFormat
-        {
-            jpg,
-            webp
-        }
-
         private PictureFormat outputFormat;
         private Point lastPosition;
         private string savepath = null;
