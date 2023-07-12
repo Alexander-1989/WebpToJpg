@@ -18,7 +18,9 @@ namespace WebpToJpg
         public Form1()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.UserPaint | 
+                ControlStyles.AllPaintingInWmPaint | 
+                ControlStyles.OptimizedDoubleBuffer, true);
             AllowDrop = true;
             KeyDown += Key_Down;
             DragDrop += Panel1_DragDrop;
@@ -29,7 +31,11 @@ namespace WebpToJpg
             menuStrip1.MouseDown += Form1_MouseDown;
             menuStrip1.MouseMove += Form1_MouseMove;
             button1.KeyDown += Key_Down;
-            colorDialog1.CustomColors = new int[] { -986896, -16338907 };
+            colorDialog1.CustomColors = new int[]
+            {
+                -986896,
+                -16338907
+            };
             toolStripComboBox1.Items.AddRange(Enum.GetNames(typeof(PictureFormat)));
             toolStripComboBox1.SelectedIndex = 0;
         }
@@ -45,7 +51,6 @@ namespace WebpToJpg
         private string savepath = null;
         private readonly string logFile = "log.txt";
         private readonly INIFile INI = new INIFile();
-        private readonly Random random = new Random();
         private readonly WebpConverter converter = new WebpConverter();
 
         private void Key_Down(object sender, KeyEventArgs e)
@@ -171,9 +176,9 @@ namespace WebpToJpg
             lastPosition = e.Location;
         }
 
-        private void WriteLog(string msg)
+        private void WriteLog(string message)
         {
-            string text = "[" + DateTime.Now + "] " + msg + "\n";
+            string text = $"[{DateTime.Now}] {message}\n";
             File.AppendAllText(logFile, text, Encoding.Default);
         }
 

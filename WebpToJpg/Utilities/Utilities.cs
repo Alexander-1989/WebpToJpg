@@ -43,7 +43,8 @@ namespace WebpToJpg.UtilitiesServise
 
             for (int i = 0; i < lineLength; i++)
             {
-                result[i] = alphabet[random.Next(alphabet.Length)];
+                int index = random.Next(alphabet.Length);
+                result[i] = alphabet[index];
             }
 
             for (int j = 0; j < extensionLength; j++)
