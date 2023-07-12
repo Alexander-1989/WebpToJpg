@@ -3,7 +3,7 @@ using Imazen.WebP;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace WebpToJpg.ImageServise
+namespace WebpToJpg.ImageService
 {
     class WebpConverter
     {

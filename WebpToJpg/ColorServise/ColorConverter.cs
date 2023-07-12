@@ -2,7 +2,7 @@
 using System.Text;
 using System.Drawing;
 
-namespace WebpToJpg.ColorServise
+namespace WebpToJpg.ColorService
 {
     public static class ColorConvert
     {

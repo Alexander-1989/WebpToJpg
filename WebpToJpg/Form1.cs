@@ -7,9 +7,9 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
-using WebpToJpg.ColorServise;
-using WebpToJpg.ImageServise;
-using WebpToJpg.UtilitiesServise;
+using WebpToJpg.ColorService;
+using WebpToJpg.ImageService;
+using WebpToJpg.UtilitiesService;
 
 namespace WebpToJpg
 {

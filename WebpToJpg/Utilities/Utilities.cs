@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebpToJpg.UtilitiesServise
+namespace WebpToJpg.UtilitiesService
 {
     internal static class Utilities
     {
