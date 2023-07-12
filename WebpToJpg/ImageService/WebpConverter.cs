@@ -5,12 +5,6 @@ using System.Drawing.Imaging;
 
 namespace WebpToJpg.ImageService
 {
-    public enum PictureFormat
-    {
-        jpg,
-        webp
-    }
-
     class WebpConverter
     {
         private readonly SimpleDecoder decoder = new SimpleDecoder();
