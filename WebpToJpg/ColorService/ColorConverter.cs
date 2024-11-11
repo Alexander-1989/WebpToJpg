@@ -9,9 +9,9 @@ namespace WebpToJpg.ColorService
         public static string ColorToHex(Color color)
         {
             StringBuilder result = new StringBuilder("#", 7);
-            if (color.R < 10) result.Append($"0{color.R}"); else result.Append($"{color.R:X}");
-            if (color.G < 10) result.Append($"0{color.G}"); else result.Append($"{color.G:X}");
-            if (color.B < 10) result.Append($"0{color.B}"); else result.Append($"{color.B:X}");
+            result.Append(color.R < 10 ? $"0{color.R}" : $"{color.R:X}");
+            result.Append(color.G < 10 ? $"0{color.G}" : $"{color.G:X}");
+            result.Append(color.B < 10 ? $"0{color.B}" : $"{color.B:X}");
             return result.ToString();
         }
 

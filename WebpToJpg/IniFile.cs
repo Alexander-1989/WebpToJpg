@@ -53,8 +53,15 @@ namespace System.IO
         {
             try
             {
-                if (typeof(T).IsEnum) return (T)Enum.Parse(typeof(T), Read(Section, Key), true);
-                else return (T)Convert.ChangeType(Read(Section, Key), typeof(T));
+                string value = Read(Section, Key);
+                if (typeof(T).IsEnum)
+                {
+                    return (T)Enum.Parse(typeof(T), value, true);
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(value, typeof(T));
+                }
             }
             catch (Exception)
             {

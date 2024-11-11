@@ -18,9 +18,13 @@ namespace WebpToJpg
         public Form1()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.UserPaint | 
+            SetStyle
+                (
+                ControlStyles.UserPaint |
                 ControlStyles.AllPaintingInWmPaint | 
-                ControlStyles.OptimizedDoubleBuffer, true);
+                ControlStyles.OptimizedDoubleBuffer, 
+                true
+                );
             AllowDrop = true;
             KeyDown += Key_Down;
             DragDrop += Panel1_DragDrop;
@@ -31,11 +35,7 @@ namespace WebpToJpg
             menuStrip1.MouseDown += Form1_MouseDown;
             menuStrip1.MouseMove += Form1_MouseMove;
             button1.KeyDown += Key_Down;
-            colorDialog1.CustomColors = new int[]
-            {
-                -986896,
-                -16338907
-            };
+            colorDialog1.CustomColors = new int[] { -986896, -16338907 };
             toolStripComboBox1.Items.AddRange(Enum.GetNames(typeof(PictureFormat)));
             toolStripComboBox1.SelectedIndex = 0;
         }
@@ -45,7 +45,7 @@ namespace WebpToJpg
         private string savepath = null;
         private readonly string logFile = "log.txt";
         private readonly INIFile INI = new INIFile();
-        private readonly WebpConverter converter = new WebpConverter();
+        private readonly PictureConverter converter = new PictureConverter();
 
         private void Key_Down(object sender, KeyEventArgs e)
         {
@@ -74,6 +74,7 @@ namespace WebpToJpg
                     ShowMessageBox(exc.Message);
                 }
             }
+
             menuStrip1.BackColor = BackColor;
         }
 
@@ -230,7 +231,7 @@ namespace WebpToJpg
 
                 WriteLog($"File {sourcePath} convert to {destinationPath}");
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 if (sourcePath.Equals(destinationPath))
                 {
@@ -240,6 +241,7 @@ namespace WebpToJpg
                 {
                     File.Copy(sourcePath, destinationPath, true);
                     WriteLog($"File {sourcePath} copyed to {destinationPath}");
+                    WriteLog(exc.Message);
                 }
             }
             return success;

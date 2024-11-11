@@ -11,7 +11,7 @@ namespace WebpToJpg.ImageService
         webp
     }
 
-    class WebpConverter
+    internal class PictureConverter
     {
         private readonly SimpleDecoder decoder = new SimpleDecoder();
         private readonly SimpleEncoder encoder = new SimpleEncoder();
